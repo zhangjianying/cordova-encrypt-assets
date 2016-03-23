@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-encrypt-assets"
+    version="0.0.5">
+
+    <name>encrypt-assets</name>
+    <description>
+        This plugin will encrypt android assets dir.
+    </description>
+    <license>MIT</license>
+
+    <!-- <repo>https://github.com/gengen1988/xgpush-cordova.git</repo>
+    <issue>https://github.com/gengen1988/xgpush-cordova/issues</issue> -->
+
+    <engines>
+        <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+
+   
+    <!-- android -->
+    <platform name="android">
+
+        <!-- source file   -->
+        <source-file src="src/android/com/zsoftware/encryptassets/ImpEncryptActivity.java" target-dir="src/com/zsoftware/encryptassets/" />
+        <source-file src="src/android/com/zsoftware/encryptassets/ImpEncryptApp.java" target-dir="src/com/zsoftware/encryptassets/" />
+        <source-file src="src/android/com/zsoftware/encryptassets/CordovaActivity.java" target-dir="src/com/zsoftware/encryptassets/" />
+
+        <!-- lib SDK -->
+        <source-file src="src/android/lib/encrypt-assets-0.5.jar" target-dir="libs" />
+
+
+        <!-- permission config -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+        </config-file>
+
+        <!-- 修改 AndroidManifest.xml application  add android:name="com.zsoftware.encryptassets.ImpEncryptApp" -->
+        <hook type="before_compile" src="scripts/changeAppParent.js" />
+        <hook type="before_compile" src="scripts/removeWWW.js" />
+    </platform>
+
+   
+</plugin>
