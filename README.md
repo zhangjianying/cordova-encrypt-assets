@@ -5,6 +5,8 @@ cordova项目加密android assets 下的文件
 2. 将zip文件加密成.z文件 (.z文件无法直接被压缩软件解压缩)
 3. 记得修改MainActivity类(暂时需要手工修改)
 
+实在不明白我说什么的,可以下载 android-debug.apk 这个程序后解压缩看 assets目录
+
 #使用须知
 使用前先安装 npm 中的2个库,建议直接安装在工程目录下,而不是全局安装
 ```
