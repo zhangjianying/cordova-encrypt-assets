@@ -42,3 +42,9 @@ public class MainActivity extends CordovaActivity
 }
 
 ```
+
+
+#已知问题
+zach-zip 使用的7z.exe 7z.dll对32位系统支持不够好. 需要手工替换一下
+http://sparanoid.com/lab/7z/download.html
+http://www.7-zip.org/a/7z1514-extra.7z
