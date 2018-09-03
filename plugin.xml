@@ -25,7 +25,6 @@
         <!-- source file   -->
         <source-file src="src/android/com/zsoftware/encryptassets/ImpEncryptActivity.java" target-dir="src/com/zsoftware/encryptassets/" />
         <source-file src="src/android/com/zsoftware/encryptassets/ImpEncryptApp.java" target-dir="src/com/zsoftware/encryptassets/" />
-        <source-file src="src/android/com/zsoftware/encryptassets/CordovaActivity.java" target-dir="src/com/zsoftware/encryptassets/" />
 
         <!-- lib SDK -->
         <source-file src="src/android/lib/encrypt-assets-0.5.jar" target-dir="libs" />
@@ -37,12 +36,22 @@
 			<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
         </config-file>
+		
+		
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			 <activity  android:name="com.zsoftware.encryptassets.ImpEncryptActivity" android:theme="@android:style/Theme.Translucent" >
+				<intent-filter android:label="@string/launcher_name">
+					<action android:name="android.intent.action.MAIN" />
+					<category android:name="android.intent.category.LAUNCHER" />
+				</intent-filter>
+			</activity>
+		</config-file>
 
         <!-- 修改 AndroidManifest.xml application  add android:name="com.zsoftware.encryptassets.ImpEncryptApp" -->
         <hook type="before_compile" src="scripts/changeAppParent.js" />
         <hook type="before_compile" src="scripts/removeWWW.js" />
 		
-		<framework src="com.android.support:support-v4:25.3.1" />
+		<framework src="com.android.support:support-v4:27.+" />
     </platform>
 
    
