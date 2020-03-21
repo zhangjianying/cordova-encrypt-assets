@@ -6,9 +6,10 @@ import java.io.InputStream;
 
 import org.apache.cordova.CordovaActivity;
 
-import com.bbb.MainActivity;
+import com.talkweb.tollmanage.MainActivity;
 import com.talkweb.android.encrypt.impl.EcryptImpl;
 import com.talkweb.android.encrypt.impl.IEcryptedEvent;
+import android.text.*;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,7 +27,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class ImpEncryptActivity extends CordovaActivity implements IEcryptedEvent {
-	private String[] permissionArr = new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"};
+	private String[] permissionArr = new String[]{"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
 	private final static String DEBUG_TAG = "ImpEncryptActivity";
 	private Dialog alertDialog = null;
 	private Handler AlertHandler = null;
@@ -49,7 +50,9 @@ public class ImpEncryptActivity extends CordovaActivity implements IEcryptedEven
 	}
 
 	private String getDefaultDecryptAssetsAbsPath() {
-		return getExternalCacheDir().getAbsolutePath() + File.separator + this.decryptAssetsDirName;
+		// return getExternalCacheDir().getAbsolutePath() + File.separator + this.decryptAssetsDirName;
+		return getExternalFilesDir("www").getPath() + File.separator + this.decryptAssetsDirName;
+		
 	}
 
 	private void tryDecryptAssets() {
@@ -57,6 +60,9 @@ public class ImpEncryptActivity extends CordovaActivity implements IEcryptedEven
 			String md5 = EcryptImpl.getMD5Checksum(getEcryptAssets());
 
 			if (isEcryptAssetsChanged(md5)) {
+				//当内容发生变化的时候  要删除原来www目录
+				deleteFolderFile(getDefaultDecryptAssetsAbsPath(),true);
+
 				if(iecryptedevent!=null){
 					iecryptedevent.EcryptedBegin();
 				}
@@ -95,6 +101,36 @@ public class ImpEncryptActivity extends CordovaActivity implements IEcryptedEven
 	public void decryptAssets(InputStream ecryptAssets) throws IOException {
 		InputStream decryptAssetStream = this.ecryptImpl.decryptAssetStream(ecryptAssets);
 		this.ecryptImpl.unzip(decryptAssetStream, this.decryptAssetsAbsPath);
+	}
+
+
+/**
+     * 删除指定目录下文件及目录
+     *
+     * @param deleteThisPath
+     * @return
+     */
+  public  void deleteFolderFile(String filePath, boolean deleteThisPath) {
+			if (!TextUtils.isEmpty(filePath)) {
+					try {
+							File file = new File(filePath);
+							if (file.isDirectory()) {// 处理目录
+									File files[] = file.listFiles();
+									for (int i = 0; i < files.length; i++) {
+											deleteFolderFile(files[i].getAbsolutePath(), true);
+									}
+							}
+							if (deleteThisPath) {
+									if (!file.isDirectory()) {// 如果是文件，删除
+											file.delete();
+									} else {// 目录
+											file.delete();
+									}
+							}
+					} catch (Exception e) {
+							e.printStackTrace();
+					}
+			}
 	}
 
 	/**
@@ -234,12 +270,12 @@ public class ImpEncryptActivity extends CordovaActivity implements IEcryptedEven
 	 * 开始解压缩操作
 	 */
 	public void beginEcryptedAction() {
-		
+
 		initHandler();
 		Ecrypter();
 
 		loadURL = getDecryptAssetsUrl() + File.separator + "www"
-				+ File.separator + "index.html";
+				+ File.separator + "index.html?t="+ new java.util.Date().getTime();
 
 
 		finish();
